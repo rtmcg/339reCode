@@ -4,18 +4,16 @@ Created on Wed Jul 04 09:18:21 2018
 
 @author: James Fraser
 
+And Greg 2020-21
+
 """
-#from tkthread import TkThread #added for python3
-#import time #added for python 3
 import tkinter as tk
-#from mttkinter import mtTkinter as tk #trying out
-import threading
-import GraphingClass_python3_edit4 as gc #changed for python3
+import GraphingClass_python3_edit4 as gc # change if filename changes
 
 
 class Interface:
 ###### WIDGET INITIALIZATION FUNCTIONS ################################################################################################################################################################################################
-    def __init__(self, frame, obj, verbose = 1):
+    def __init__(self, frame, obj, verbose = 0):
         
         ## Frame and argument 
         self.frame = frame                          # Associate tkinter object, tk.Tk() in PythonController
@@ -37,15 +35,13 @@ class Interface:
         ## Create Labels for each init variable, can grow arbitrarily large
         # the buttons are placed into an array, making them accesible in other methods and also outside of the initialized createInterface class
         for i in self.obj.initVar: 
-            print('i is') #added to test python3
-            print(i) #added to test python3
+
             name = i[1]+ " (" +i[3] +"): "
             startingVal = i[2]
             row = rowCount
             label = tk.Label(self.frame, text=name)
             label.grid(column=0,row= row)
-            print(type(startingVal)) #added to test python3
-            print(startingVal) #added to test python3
+
             band = tk.Entry(self.frame)
             startingVal = str(round(float(startingVal),3))  # Round the float for aesthetic reasons
             band.insert(0, startingVal)
@@ -96,10 +92,7 @@ class Interface:
         ## Init data storage for copy from ArduinoClass and then graphing
         self.getMainStorage()
         
-        ## Start thread for parallel script execution 
-
-        #self.thread = threading.Thread(target = tk.mainloop, name = "GUI  loop")   # the interface should only change condition variables within the other loops # removed, tk.mainloop is called in PythonController, which should only be once in the main loop
-
+        ## Start thread for parallel script execution # changed for python 3, just run mainloop in python controller
         
     
 ###### MAIN WINDOW BUTTON HANDLER METHODS ################################################################################################################################################################################################
