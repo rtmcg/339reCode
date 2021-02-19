@@ -4,6 +4,8 @@ Created on Wed Jul 04 09:18:21 2018
 
 @author: James Fraser
 
+And Greg 2020-21
+
 """
 
 import serial
@@ -13,7 +15,7 @@ import struct
 import threading
 
 class Arduino:
-    def __init__(self,verbose=1):
+    def __init__(self,verbose=0):
         
         self.verbose = verbose
         self.running = False  
@@ -78,7 +80,6 @@ class Arduino:
 
     ## Send a line of string to Arduino ##
     def send(self,strr):
-        #self.device.write("%s\n" % (str)) #commented out for python3
         strr = strr + '\n' #added for python3
         self.device.write(strr.encode()) #changed for python 3
         if self.verbose: print("\nSent '%s'\n" % (strr))
@@ -86,12 +87,7 @@ class Arduino:
      
     ## Read and slightly clean a line from Arduino ##
     def getResp(self):
-        #str = self.device.readline() #commented out for python3
-
-        strr = self.device.readline().decode('ISO-8859-1').split('\r\n')[0].replace('\n', '') #changed for python3 #added 'ISO-8859-2' or 'ISO-8859-1'
-
-        #str = str.replace("\n","") #commented out for python3
-        #str = str.replace("\r","") #commented out for python3
+        strr = self.device.readline().decode('ISO-8859-1', errors='ignore').split('\r\n')[0].replace('\n', '') #changed for python 3
         if self.verbose: print("Raw resp: '%s' " % (strr))
 
         return strr
@@ -153,8 +149,7 @@ class Arduino:
         while clearing :    # This while loop clears the junk, and will permit the START signal to be properly received. could probably be optimized
             if attemptCount == 5:
                 raise Exception("EXCEPTION: Unable to successfully start data acquisition.")
-            #resp = self.device.readline()   # Clears junk
-            resp = self.device.readline().decode(errors='ignore')#.split('\r\n')[0]   # Clears junk #changed for python3
+            resp = self.device.readline().decode(errors='ignore')   # Clears junk #changed for python3
             if self.verbose : print("Response in start method:", resp)
             if (resp ==''):                 # THIS DOES NOT SEEM LIKE A GOOD SOLUTION              
                 attemptCount +=1              
@@ -236,7 +231,8 @@ class Arduino:
             print("Changes to INIT variables have been recorded and saved as: ", (initRecName))
             
    ## Convenient to have a function to close the serial port 
-    def closePort(self):      
+    def closePort(self):
+        self.device.cancel_read() # added, was getting errors when closing
         self.device.close()
         del self.device
         if self.verbose: print("\nPort sould be closed now.\n")
@@ -252,7 +248,10 @@ class Arduino:
         
         while True:
             while self.running:    
-                resp = self.getResp()               # Readline
+                try:
+                    resp = self.getResp()               # Readline
+                except:
+                    resp = '' # use continue to not return empty string when read errors, changed for python 3
                 if resp != '':                      # Necessary, because had to add a Serial.println() in Arduino that limits problems junk data
                     respSplit = resp.split("\t")    # Create table
                     
@@ -280,7 +279,6 @@ class Arduino:
         try:
             if hexVal == '0':
                 hexVal = "00000000"
-            #value = struct.unpack('!f', hexVal.decode('hex'))[0]
             value = struct.unpack('!f', bytes.fromhex(hexVal))[0] #changed for python3
             return value    
         except:
