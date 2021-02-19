@@ -21,7 +21,7 @@ class Graph:
 ## ================= MAIN GRAPHING OPTIONS ==============
         
         self.timeSlice = 10      # Graph every 10th piece of data
-        self.updatePeriod = 50  # (ms) Period of often you want to update the graph via the self.root.after() callback
+        self.updatePeriod = 500  # (ms) Period of often you want to update the graph via the self.root.after() callback
         
 ## =====================================================
 
