@@ -6,22 +6,22 @@ Created on Wed Jul 18 15:43:25 2018
 
 With code adapted from www.pythonprogramming.net
 
+And Greg 2020-21
+
 """
-
-
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import tkinter as tk
-#from mttkinter import mtTkinter as tk #trying out
+
 
 class Graph:
-    def __init__(self, win, obj, row, verbose = 1):
+    def __init__(self, win, obj, row, verbose = 0):
         
 ## ================= MAIN GRAPHING OPTIONS ==============
         
         self.timeSlice = 10      # Graph every 10th piece of data
-        self.updatePeriod = 500  # (ms) Period of often you want to update the graph via the self.root.after() callback
+        self.updatePeriod = 50  # (ms) Period of often you want to update the graph via the self.root.after() callback
         
 ## =====================================================
 
@@ -41,8 +41,8 @@ class Graph:
         self.fig = Figure(figsize = (5,5), dpi = 100)   # Create figure object
         self.a = self.fig.add_subplot(111)              # Create and add a subplot to the figure object
         
-        self.canvas = FigureCanvasTkAgg(self.fig,master = self.root)  # This canvas is what we render the graph to
-        self.canvas.draw() #used .show() before
+        self.canvas = FigureCanvasTkAgg(self.fig, master = self.root)  # This canvas is what we render the graph to
+        self.canvas.draw() # shows plot # changed for python 3
         
         self.canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
         self.canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)    
