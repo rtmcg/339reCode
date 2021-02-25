@@ -3,6 +3,7 @@
 Created on Wed Jul 18 15:43:25 2018
 
 @author: James Fraser
+and Greg
 
 With code adapted from www.pythonprogramming.net
 
