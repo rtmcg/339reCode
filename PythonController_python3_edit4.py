@@ -3,6 +3,7 @@
 Created on Wed Jul 04 09:18:21 2018
     
 @author: James Fraser
+and Greg
 
 """
 #####============ IMPORT LIBRARIES =================####
