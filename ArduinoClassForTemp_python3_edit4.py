@@ -3,7 +3,7 @@
 Created on Wed Jul 04 09:18:21 2018
 
 @author: James Fraser
-
+and Greg
 """
 
 import serial
@@ -237,6 +237,7 @@ class Arduino:
             
    ## Convenient to have a function to close the serial port 
     def closePort(self):      
+        self.device.cancel_read() # added, was getting errors when closing during a read
         self.device.close()
         del self.device
         if self.verbose: print("\nPort sould be closed now.\n")
@@ -252,7 +253,10 @@ class Arduino:
         
         while True:
             while self.running:    
-                resp = self.getResp()               # Readline
+                try:
+                    resp = self.getResp()               # Readline
+                except: # exception added to just return empty string, there were serial exceptions
+                    resp = '' # continue  also works here, if skipping is preferable to an empty string when exceptions in reading a response occur
                 if resp != '':                      # Necessary, because had to add a Serial.println() in Arduino that limits problems junk data
                     respSplit = resp.split("\t")    # Create table
                     
