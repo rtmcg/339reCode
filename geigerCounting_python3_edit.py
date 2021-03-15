@@ -99,7 +99,7 @@ def setPeriod(c,period):
 
 
 ###===== When this is called, the script will start calling relevant functions ###
-def geiger(replicas=2, intervals=10, period=0.2,graphics=True):
+def geiger(replicas=2, intervals=10, period=0.2):
     saveFileName=datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S") +"_period"+str(period)+"_int"+str(intervals)+"_rep"+str(replicas)+ "_COUNTING_DATApy3.csv"
     print("Connecting to Arduino\n")
     a = GeigerArduino()                 # Initialize instance of the GeigerArduino class
@@ -136,5 +136,5 @@ def geiger(replicas=2, intervals=10, period=0.2,graphics=True):
 #                               Run the script!
 # ==============================================================================
     
-#rc = geiger(replicas=1,   intervals=100,period=0.2,graphics=False)
-rc = geiger(replicas=1,   intervals=10,period=0.2,graphics=False)
+rc = geiger(replicas=1, intervals=100, period=0.2) # Before there was a 'graphics' parameter, but that didn't do anything.
+
