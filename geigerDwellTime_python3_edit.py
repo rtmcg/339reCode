@@ -63,7 +63,7 @@ class Arduino: # Definition of class made to read geiger data sent from Arduino
         get data out fast enough to prevent data loss.
         """
         #resp = self.handle.readline()
-        resp = self.handle.readline().decode()#.split('\r\n')[0]  
+        resp = self.handle.readline().decode('latin-1').split('\r\n')[0]  
         if self.verbose: print("Verbose got resp:", repr(resp), "\n")
         if "\r\n" != resp[-2:]:
             if "\r" == resp[-1:]: # Stupid readline, do your job ... one @##$@ job!
