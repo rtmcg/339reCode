@@ -53,4 +53,4 @@ class Arduino:
         print("Port is now closed")
 
 #print(Arduino().getResp()) #check output
-#print(Arduino().send("LASER 1360"))        
+print(Arduino().send("LASER 1360"))        
