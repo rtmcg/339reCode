@@ -21,7 +21,8 @@ a = laserClass_python3_edit.Arduino()       # Begin instance of Arduino class
 steps = 360                 # Synonymous with the number of measurements you wish you take
 degsPerStep = 1             # This has to be calibrated by you       
 a.send("LASER 1360")        # Laser control voltage
-a.send("STEPS %d"%(steps))  # Total number of steps
+#a.send("STEPS %d"%(steps))  # Total number of steps
+a.send(f"STEPS {steps}")  # Total number of steps
 a.send("DELAY 4")          # Delay time before reading value (ms), >4 recommende
 a.send("START")             # Start the stepping/reading
 a.send("STOP")              # Sends a signal to change a variable on the arduino such that the motor stops after one full loop
@@ -45,8 +46,10 @@ for k in range(steps):
         adc = int(words[1])            # Note A0 ADC value and append to appropriate array
         adcValues.append(adc)
     else:
-        print(("Unexpected response: %s"%(resp)))
-        print(("Length: %d"%(len(resp))))
+        #print(("Unexpected response: %s"%(resp)))
+        #print(("Length: %d"%(len(resp))))
+        print(f"Unexpected response: {resp}")
+        print(f"Length: {len(resp)}")        
     if 10 == index:
         break
         

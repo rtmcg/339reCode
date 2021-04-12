@@ -8,14 +8,16 @@ import serial
 
 
 class Arduino:
-    def __init__(self,verbose=0):
+    def __init__(self, verbose=0):
         self.verbose = verbose
         if verbose: print("introArduino class creator: Verbose mode activated")
         for i in range(1,10): #you maay have to adjust range(1,10) depending on your COM ports
-            device = "COM%d" % (i) 
+            #device = "COM%d" % (i) 
+            device = f"COM{i}" 
             try:
                 self.device = serial.Serial(device,baudrate=115200,timeout=1.0) 
-                if verbose: print("Found device at %s" % (device))
+                #if verbose: print("Found device at %s" % (device))
+                if verbose: print(f"Found device at {device}")
                 break
             except:
                 continue   
@@ -34,20 +36,23 @@ class Arduino:
                 exception_count = exception_count + 1
             attempts = attempts + 1
             if 5 == attempts:
-                print("Unable to communicate with Arduino...%d exceptions" % (exception_count))
+                #print("Unable to communicate with Arduino...%d exceptions" % (exception_count))
+                print(f"Unable to communicate with Arduino...{exception_count} exceptions")
                 break
-    def send(self,str):
+    def send(self, strr): # changed str to strr, str is a built-in type
         #self.device.write("%s\n" % (str))
-        str = str + '\n'
-        self.device.write(str.encode())
-        if self.verbose: print("Sent '%s'" % (str))
+        strr = strr + '\n'
+        self.device.write(strr.encode())
+        #if self.verbose: print("Sent '%s'" % (str))
+        if self.verbose: print(f"Sent '{strr}'")
     def getResp(self):
         if self.verbose: print("Waiting for response...")
-        str = self.device.readline().decode().split('\r\n')[0] 
+        strr = self.device.readline().decode().split('\r\n')[0] 
         #str = str.replace("\n","")
         #str = str.replace("\r","")
-        if self.verbose: print("Got response: '%s'" % (str))
-        return str
+        #if self.verbose: print("Got response: '%s'" % (str))
+        if self.verbose: print(f"Got response: '{strr}'")
+        return strr
     def closePort(self):
         self.device.close()
         print("Port is now closed")

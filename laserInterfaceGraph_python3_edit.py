@@ -17,7 +17,8 @@ a = laserClass_python3_edit.Arduino()
 steps = 360
 degsPerStep = 1           # This has to be calibrated by you       
 a.send("LASER 1280")        # Laser control voltage
-a.send("STEPS %d"%(steps))  # Total number of steps
+#a.send("STEPS %d"%(steps))  # Total number of steps
+a.send(f"STEPS {steps}")  # Total number of steps
 a.send("DELAY 4")         # Delay time before reading value (ms), >4 recommended
 a.send("START")             # Start the stepping/reading
 a.send("STOP")
@@ -48,8 +49,10 @@ for k in range(steps):
         #p.axis([0,steps*degsPerStep,0,max(vector)])
         p.pause(0.01)      
     else:
-        print(("Unexpected response: %s"%(resp)))
-        print(("Length: %d"%(len(resp))))
+        #print(("Unexpected response: %s"%(resp)))
+        #print(("Length: %d"%(len(resp))))
+        print(f"Unexpected response: {resp}")
+        print(f"Length: {len(resp)}") 
     if 10 == index:
         break
 a.send("LASER 0")
