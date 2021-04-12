@@ -33,20 +33,30 @@ for k in range(steps):
         if 0 == step:
             p.ion()
             fig = p.figure()
-            p.xlabel("Step index")
-            p.ylabel("ADC reading")
+            #p.xlabel("Step index") # setting label with ax
+            #p.ylabel("ADC reading")
             ax = fig.add_subplot(111)
+            ax.set_xlabel("Step index")
+            ax.set_ylabel("ADC reading")
             lines, = ax.plot(list(range(k+1)), vector[:k+1])  
-            p.axis([0, steps, 0, max(vector)])
+            #ax.set_xlim(0, steps)
+            #ax.set_ylim(0, max(vector)) # max(vector) is 0 here
+            #p.axis([0, steps, 0, max(vector)]) # set axis limits with ax
             #lines, = ax.plot(np.array(range(k+1))*degsPerStep, vector[:k+1])  
             #p.axis([0, steps*degsPerStep, 0, max(vector)])
+            #ax.set_xlim(0, steps*degsPerStep)
+            #ax.set_ylim(0, max(vector)) # max(vector) is 0 here
             p.pause(0.01)      
             index += 1
         vector[step] = adc
         lines.set_data(list(range(k+1)), vector[:k+1])
-        p.axis([0, steps, 0, max(vector)])
+        #p.axis([0, steps, 0, max(vector)])
+        ax.set_xlim(0, steps)
+        ax.set_ylim(0, max(vector))
         #lines.set_data(np.array(range(k+1))*degsPerStep, vector[:k+1])
         #p.axis([0, steps*degsPerStep, 0, max(vector)])
+        #ax.set_xlim(0, steps*degsPerStep)
+        #ax.set_ylim(0, max(vector))
         p.pause(0.01)      
     else:
         #print(("Unexpected response: %s"%(resp)))
