@@ -14,7 +14,7 @@ import matplotlib.pyplot as p
 import laserClass_python3_edit
 
 a = laserClass_python3_edit.Arduino() 
-steps = 20 #360
+steps = 360
 degsPerStep = 1           # This has to be calibrated by you       
 a.send("LASER 1280")        # Laser control voltage
 #a.send("STEPS %d"%(steps))  # Total number of steps

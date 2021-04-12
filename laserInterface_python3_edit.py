@@ -18,7 +18,7 @@ import laserClass_python3_edit
 import numpy as np
 
 a = laserClass_python3_edit.Arduino()       # Begin instance of Arduino class
-steps = 20 #360                 # Synonymous with the number of measurements you wish you take
+steps = 360                 # Synonymous with the number of measurements you wish you take
 degsPerStep = 1             # This has to be calibrated by you       
 a.send("LASER 1360")        # Laser control voltage
 #a.send("STEPS %d"%(steps))  # Total number of steps
