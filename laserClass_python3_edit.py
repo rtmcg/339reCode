@@ -15,7 +15,7 @@ class Arduino:
             #device = "COM%d" % (i) 
             device = f"COM{i}" 
             try:
-                self.device = serial.Serial(device,baudrate=115200, timeout=1.0) 
+                self.device = serial.Serial(device, baudrate=115200, timeout=1.0) 
                 #if verbose: print("Found device at %s" % (device))
                 if verbose: print(f"Found device at {device}")
                 break
