@@ -14,7 +14,7 @@ import matplotlib.pyplot as p
 import laserClass_python3_edit
 
 a = laserClass_python3_edit.Arduino() 
-steps = 360
+steps = 20 #360
 degsPerStep = 1           # This has to be calibrated by you       
 a.send("LASER 1280")        # Laser control voltage
 #a.send("STEPS %d"%(steps))  # Total number of steps
@@ -27,7 +27,7 @@ index = -1
 for k in range(steps):
     resp = a.getResp()
     if 9 == len(resp) and resp[4] == ':':
-        words = str.split(resp,":")
+        words = str.split(resp, ":")
         step = int(words[0])
         adc = int(words[1])
         if 0 == step:
@@ -36,17 +36,17 @@ for k in range(steps):
             p.xlabel("Step index")
             p.ylabel("ADC reading")
             ax = fig.add_subplot(111)
-            lines, = ax.plot(list(range(k+1))*degsPerStep,vector[:k+1])  
-            p.axis([0,steps*degsPerStep,0,max(vector)])
-            #lines, = ax.plot(np.array(range(k+1))*degsPerStep,vector[:k+1])  
-            #p.axis([0,steps*degsPerStep,0,max(vector)])
+            lines, = ax.plot(list(range(k+1)), vector[:k+1])  
+            p.axis([0, steps, 0, max(vector)])
+            #lines, = ax.plot(np.array(range(k+1))*degsPerStep, vector[:k+1])  
+            #p.axis([0, steps*degsPerStep, 0, max(vector)])
             p.pause(0.01)      
             index += 1
         vector[step] = adc
-        lines.set_data(list(range(k+1))*degsPerStep,vector[:k+1])
-        p.axis([0,steps*degsPerStep,0,max(vector)])
-        #lines.set_data(np.array(range(k+1))*degsPerStep,vector[:k+1])
-        #p.axis([0,steps*degsPerStep,0,max(vector)])
+        lines.set_data(list(range(k+1)), vector[:k+1])
+        p.axis([0, steps, 0, max(vector)])
+        #lines.set_data(np.array(range(k+1))*degsPerStep, vector[:k+1])
+        #p.axis([0, steps*degsPerStep, 0, max(vector)])
         p.pause(0.01)      
     else:
         #print(("Unexpected response: %s"%(resp)))

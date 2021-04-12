@@ -18,7 +18,7 @@ import laserClass_python3_edit
 import numpy as np
 
 a = laserClass_python3_edit.Arduino()       # Begin instance of Arduino class
-steps = 360                 # Synonymous with the number of measurements you wish you take
+steps = 20 #360                 # Synonymous with the number of measurements you wish you take
 degsPerStep = 1             # This has to be calibrated by you       
 a.send("LASER 1360")        # Laser control voltage
 #a.send("STEPS %d"%(steps))  # Total number of steps
@@ -38,7 +38,7 @@ for k in range(steps):
         arryAll.append(resp)               # Append raw response to array of raw serial data
         print("Got response ", resp, "\n")
             
-        words = str.split(resp,":")  # Split the response by the colon delimiter
+        words = str.split(resp, ":")  # Split the response by the colon delimiter
 
         step = int(words[0])            # Note step count and append to appropriate array
         stepCounts.append(step)
@@ -53,7 +53,7 @@ for k in range(steps):
     if 10 == index:
         break
         
-stepCountsCal=np.array(stepCounts)*degsPerStep
+stepCountsCal=np.array(stepCounts) * degsPerStep
 adcValuesnp=np.array(adcValues)    
     
 p.plot(stepCountsCal, adcValuesnp)    # Basic plot of ADC value per calibrated degree
