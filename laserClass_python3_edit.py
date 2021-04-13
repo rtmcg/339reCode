@@ -11,16 +11,18 @@ class Arduino:
     def __init__(self, verbose=0):
         self.verbose = verbose
         if verbose: print("introArduino class creator: Verbose mode activated")
-        for i in range(1,10): #you maay have to adjust range(1,10) depending on your COM ports
+        #for i in range(2,10): # you may have to adjust range(1,10) depending on your COM ports
             #device = "COM%d" % (i) 
-            device = f"COM{i}" 
-            try:
-                self.device = serial.Serial(device, baudrate=115200, timeout=1.0) 
-                #if verbose: print("Found device at %s" % (device))
-                if verbose: print(f"Found device at {device}")
-                break
-            except:
-                continue   
+            #device = f"COM{i}" 
+        device = 'COM4' # COM port used for Arduino
+        try:
+            self.device = serial.Serial(device, baudrate=115200, timeout=1.0) 
+            #if verbose: print("Found device at %s" % (device))
+            if verbose: print(f"Found device at {device}")
+            #break
+        except:
+            print('Device not found')
+            #continue   
         self.device.setDTR(1); #reboot Arduino
         self.device.setDTR(0);
         self.device.setDTR(1);

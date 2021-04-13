@@ -10,11 +10,11 @@ gives an example interaction with the Arduino.
 
 import numpy as np
 #import string
-import matplotlib.pyplot as p
+import matplotlib.pyplot as plt
 import laserClass_python3_edit
 
-a = laserClass_python3_edit.Arduino() 
-steps = 360
+a = laserClass_python3_edit.Arduino(verbose = 0) 
+steps = 360 
 degsPerStep = 1           # This has to be calibrated by you       
 a.send("LASER 1280")        # Laser control voltage
 #a.send("STEPS %d"%(steps))  # Total number of steps
@@ -31,8 +31,8 @@ for k in range(steps):
         step = int(words[0])
         adc = int(words[1])
         if 0 == step:
-            p.ion()
-            fig = p.figure()
+            plt.ion()
+            fig = plt.figure()
             #p.xlabel("Step index") # setting label with ax
             #p.ylabel("ADC reading")
             ax = fig.add_subplot(111)
@@ -46,7 +46,7 @@ for k in range(steps):
             #p.axis([0, steps*degsPerStep, 0, max(vector)])
             #ax.set_xlim(0, steps*degsPerStep)
             #ax.set_ylim(0, max(vector)) # max(vector) is 0 here
-            p.pause(0.01)      
+            plt.pause(0.01)      
             index += 1
         vector[step] = adc
         lines.set_data(list(range(k+1)), vector[:k+1])
@@ -57,7 +57,7 @@ for k in range(steps):
         #p.axis([0, steps*degsPerStep, 0, max(vector)])
         #ax.set_xlim(0, steps*degsPerStep)
         #ax.set_ylim(0, max(vector))
-        p.pause(0.01)      
+        plt.pause(0.01)      
     else:
         #print(("Unexpected response: %s"%(resp)))
         #print(("Length: %d"%(len(resp))))
