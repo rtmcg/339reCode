@@ -35,7 +35,7 @@ class Arduino:
             except:
                 if self.verbose: print("Exception")
                 exception_count = exception_count + 1
-            attempts = attempts + 1
+            attempts = attempts + 1 # redundant to have both exception_count and attempts counting, but it works
             if 5 == attempts:
                 #print("Unable to communicate with Arduino...%d exceptions" % (exception_count))
                 print(f"Unable to communicate with Arduino...{exception_count} exceptions")

@@ -32,7 +32,7 @@ arryAll = []    # Declare arrays for storing data.
 stepCounts=[]   # Step indexes
 adcValues = []  # ADC readings
 
-index = -1
+index = -1 # I'm not sure the point of this, the index is not incremented, maybe set it to 10 if leaving the loop after one time is wanted
 for k in range(steps):
     resp = a.getResp()
     if 9 == len(resp) and resp[4] == ':':
