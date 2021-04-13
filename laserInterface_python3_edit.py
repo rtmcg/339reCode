@@ -17,7 +17,8 @@ import matplotlib.pyplot as plt
 import laserClass_python3_edit
 import numpy as np
 
-a = laserClass_python3_edit.Arduino(verbose = 0)       # Begin instance of Arduino class
+device = 'COM4' # COM port set on arduino
+a = laserClass_python3_edit.Arduino(device = device, verbose = 0)       # Begin instance of Arduino class
 steps = 360                 # Synonymous with the number of measurements you wish you take
 degsPerStep = 1             # This has to be calibrated by you       
 a.send("LASER 1360")        # Laser control voltage

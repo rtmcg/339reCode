@@ -8,13 +8,12 @@ import serial
 
 
 class Arduino:
-    def __init__(self, verbose=0):
+    def __init__(self, device = 'COM3', verbose = 0): # device is COM port used with arduino
         self.verbose = verbose
         if verbose: print("introArduino class creator: Verbose mode activated")
         #for i in range(2,10): # you may have to adjust range(1,10) depending on your COM ports
             #device = "COM%d" % (i) 
             #device = f"COM{i}" 
-        device = 'COM4' # COM port used for Arduino
         try:
             self.device = serial.Serial(device, baudrate=115200, timeout=1.0) 
             #if verbose: print("Found device at %s" % (device))
@@ -59,5 +58,6 @@ class Arduino:
         self.device.close()
         print("Port is now closed")
 
-#print(Arduino().getResp()) #check output
-print(Arduino().send("LASER 1360"))        
+#device = 'COM3'
+#print(Arduino(device = device).getResp()) #check output
+#print(Arduino(device = device).send("LASER 1360"))        
