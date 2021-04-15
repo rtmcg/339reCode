@@ -32,7 +32,7 @@ for k in range(steps):
         step = int(words[0])
         adc = int(words[1])
         if 0 == step:
-            plt.ion()
+            #plt.ion() # can be used or not
             fig = plt.figure()
             #plt.xlabel("Step index") # setting label with ax
             #plt.ylabel("ADC reading")
