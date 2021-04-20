@@ -3,7 +3,9 @@
 Created on Wed Jul 04 09:18:21 2018
 
 @author: James Fraser
-and Greg
+
+And Greg 2020-21
+
 """
 
 import serial
@@ -13,11 +15,11 @@ import struct
 import threading
 
 class Arduino:
-    def __init__(self,verbose=1):
+    def __init__(self, device = 'COM3', verbose=0):
         
         self.verbose = verbose
         self.running = False  
-    
+
         self.mainStorage = []
         self.headerTable = []
         self.unitTable = []
@@ -33,20 +35,25 @@ class Arduino:
         connectAttempt = 0
         maxCount = 8
         for i in range(0,maxCount):
-            device = "COM%d" % (i) 
+            #device = "COM%d" % (i) 
             try:
                 connectAttempt += 1
-                self.device = serial.Serial(device,baudrate=115200,timeout=1.0) 
+                self.device = serial.Serial(device, baudrate=115200, timeout=1.0) 
                # self.device.open()
-                print("Found device at %s \n" % (device))
+                #print("Found device at %s \n" % (device))
+                print(f"Found device at {device} \n")
                 break
             except:
                 if (connectAttempt == maxCount):
-                    raise Exception("Unable to connect to Arduino after %d attempts. Check that it's plugged in and the drivers are properly installed." % (connectAttempt - 1))
+                    #raise Exception("Unable to connect to Arduino after %d attempts. Check that it's plugged in and the drivers are properly installed." % (connectAttempt - 1))
+                    raise Exception(f"Unable to connect to Arduino after {(connectAttempt - 1)} attempts. Check that it's plugged in and the drivers are properly installed.")
                 continue   
-        self.device.setDTR(1); #reboot Arduino
-        self.device.setDTR(0);
-        self.device.setDTR(1);
+        #self.device.setDTR(1); #reboot Arduino
+        #self.device.setDTR(0);
+        #self.device.setDTR(1);
+        self.device.setDTR(1) #reboot Arduino
+        self.device.setDTR(0)
+        self.device.setDTR(1)        
         exception_count = 0
         attempts = 0
         trying = True
@@ -67,32 +74,27 @@ class Arduino:
             if 15 == attempts:
                 trying = False
                 self.device.close()
-                raise Exception("\nUnable to handshake with Arduino...%d exceptions" % attempts)
+                #raise Exception("\nUnable to handshake with Arduino...%d exceptions" % attempts)
+                raise Exception("\nUnable to handshake with Arduino...{attempts} exceptions")
                 break  
-            
-            
+                   
         self.getInitVar()
         self.thread = threading.Thread(target = self.dataCollection, name = "Data collection loop") #each of these threads should loop infinitely
-       
         
 
     ## Send a line of string to Arduino ##
     def send(self,strr):
-        #self.device.write("%s\n" % (str)) #commented out for python3
         strr = strr + '\n' #added for python3
         self.device.write(strr.encode()) #changed for python 3
-        if self.verbose: print("\nSent '%s'\n" % (strr))
+        #if self.verbose: print("\nSent '%s'\n" % (strr))
+        if self.verbose: print(f"\nSent '{strr}'\n")
    
      
     ## Read and slightly clean a line from Arduino ##
     def getResp(self):
-        #str = self.device.readline() #commented out for python3
-
-        strr = self.device.readline().decode('ISO-8859-1').split('\r\n')[0].replace('\n', '') #changed for python3 #added 'ISO-8859-2' or 'ISO-8859-1'
-
-        #str = str.replace("\n","") #commented out for python3
-        #str = str.replace("\r","") #commented out for python3
-        if self.verbose: print("Raw resp: '%s' " % (strr))
+        strr = self.device.readline().decode('ISO-8859-1', errors='ignore').split('\r\n')[0].replace('\n', '') #changed for python 3
+        #if self.verbose: print("Raw resp: '%s' " % (strr))
+        if self.verbose: print(f"Raw resp: '{strr}' ")
 
         return strr
     
@@ -109,7 +111,8 @@ class Arduino:
                     splitVar = rawVar.split("\t")   # Clean it
                     rowCount+=1                     # Add to count
                     for i in splitVar:
-                        if (i is not'=' )and (i != ""): # cleans junk
+                        #if (i is not'=' )and (i != ""): # cleans junk
+                        if i != '=' and i != "": # cleans junk # is not gave a warning, said to use !=
                             outputArry.append(i)    # Put into the variable array
             elif (rawVar == "READY"):               # Indicates all INIT variables have been sent
                 trying = False                      # Change run condition
@@ -153,18 +156,20 @@ class Arduino:
         while clearing :    # This while loop clears the junk, and will permit the START signal to be properly received. could probably be optimized
             if attemptCount == 5:
                 raise Exception("EXCEPTION: Unable to successfully start data acquisition.")
-            #resp = self.device.readline()   # Clears junk
-            resp = self.device.readline().decode(errors='ignore')#.split('\r\n')[0]   # Clears junk #changed for python3
+            resp = self.device.readline().decode(errors='ignore')   # Clears junk #changed for python3
             if self.verbose : print("Response in start method:", resp)
-            if (resp ==''):                 # THIS DOES NOT SEEM LIKE A GOOD SOLUTION              
+            #if (resp ==''):                 # THIS DOES NOT SEEM LIKE A GOOD SOLUTION     
+            if resp == '':                 # THIS DOES NOT SEEM LIKE A GOOD SOLUTION 
                 attemptCount +=1              
                 self.send("START")
                 #resp = self.device.readline()
                 resp = self.device.readline().decode(errors='ignore')#.split('\r\n')[0]  #changed for python3
-                if (resp == 'INDEX\t0\t1\n'):    
+                #if (resp == 'INDEX\t0\t1\n'): 
+                if resp == 'INDEX\t0\t1\n':     
                     clearing = False
                     if self.verbose: print("Done clearing junk!")
-            elif (resp =='INDEX\t0\t1\n'):
+            #elif (resp =='INDEX\t0\t1\n'):
+            elif resp == 'INDEX\t0\t1\n':
                 clearing = False
                 if self.verbose: print("Done clearing junk!")
                 
@@ -193,7 +198,7 @@ class Arduino:
             
         print("Sending to Arduino")                                                  
         packedMessage = "SET "+ varName + " " + str(inputVal) 
-        if len(self.mainStorage) > 0 :
+        if len(self.mainStorage) > 0:
             latestVals = self.mainStorage[-1]
         else:
             latestVals = [0]
@@ -203,7 +208,7 @@ class Arduino:
         self.device.flush() # Wait for the serial line to finish clearing
         self.send("\n")     # Add a newline character to finish the message
         
-        print("Sent " +packedMessage+ " to Arduino")                   
+        print("Sent " + packedMessage + " to Arduino")                   
                                
         if apple == 0:    # If the flag has been set to 0, restart the reading of data      
             self.running = True
@@ -221,7 +226,7 @@ class Arduino:
             saveFileName = saveFileName + '.csv'
             
         ## Add the header table to the main storage array, for ease of reading when the data is examined later
-        self.mainStorage.insert(0,self.headerTable) 
+        self.mainStorage.insert(0, self.headerTable) 
         if self.verbose: print("Main storage array:", self.mainStorage)
         
         ## Actually Save      
@@ -236,8 +241,8 @@ class Arduino:
             print("Changes to INIT variables have been recorded and saved as: ", (initRecName))
             
    ## Convenient to have a function to close the serial port 
-    def closePort(self):      
-        self.device.cancel_read() # added, was getting errors when closing during a read
+    def closePort(self):
+        self.device.cancel_read() # added, was getting errors when closing
         self.device.close()
         del self.device
         if self.verbose: print("\nPort sould be closed now.\n")
@@ -255,12 +260,13 @@ class Arduino:
             while self.running:    
                 try:
                     resp = self.getResp()               # Readline
-                except: # exception added to just return empty string, there were serial exceptions
-                    resp = '' # continue  also works here, if skipping is preferable to an empty string when exceptions in reading a response occur
+                except:
+                    resp = '' # use continue to not return empty string when read errors, changed for python 3
                 if resp != '':                      # Necessary, because had to add a Serial.println() in Arduino that limits problems junk data
                     respSplit = resp.split("\t")    # Create table
                     
-                    if (len(respSplit) != 5 ) and  (len(respSplit) != 3 ):  # Helps avoid processing junk
+                    #if (len(respSplit) != 5 ) and  (len(respSplit) != 3 ):  # Helps avoid processing junk
+                    if len(respSplit) != 5 and len(respSplit) != 3:  # Helps avoid processing junk
                         if self.verbose: print("\n\nGARBAGE FOUND IN dataCollection (", respSplit,") BAD RESPONSE LENGTH.\n\n")
                         
                     elif respSplit[0] == "INDEX":               # Get the time index
@@ -273,7 +279,8 @@ class Arduino:
                     else :
                         if self.verbose: print("\n\nGARBAGE FOUND IN dataCollection: ", resp, "\n\n")        # Catches the garbage of length 5 and 3
                         
-                    if (len(tempStorage) == (len(self.headerTable))) :  # Once a block has been completely read, it's time to append the data to the main storage array
+                    #if (len(tempStorage) == (len(self.headerTable))) :  # Once a block has been completely read, it's time to append the data to the main storage array
+                    if len(tempStorage) == len(self.headerTable):  # Once a block has been completely read, it's time to append the data to the main storage array
                             self.mainStorage.append(tempStorage)        # Add temp to main array
                             if self.verbose: print("DATA STORED AS: ", tempStorage, "\n")
                             tempStorage = []
@@ -284,7 +291,6 @@ class Arduino:
         try:
             if hexVal == '0':
                 hexVal = "00000000"
-            #value = struct.unpack('!f', hexVal.decode('hex'))[0]
             value = struct.unpack('!f', bytes.fromhex(hexVal))[0] #changed for python3
             return value    
         except:

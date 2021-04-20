@@ -3,20 +3,17 @@
 Created on Wed Jul 04 09:18:21 2018
 
 @author: James Fraser
-and Greg
+
+And Greg 2020-21
 
 """
-#from tkthread import TkThread #added for python3
-#import time #added for python 3
 import tkinter as tk
-#from mttkinter import mtTkinter as tk #trying out
-import threading
-import GraphingClass_python3_edit4 as gc #changed for python3
+import GraphingClass_python3_edit4 as gc # change if filename changes
 
 
 class Interface:
 ###### WIDGET INITIALIZATION FUNCTIONS ################################################################################################################################################################################################
-    def __init__(self, frame, obj, verbose = 1):
+    def __init__(self, frame, obj, verbose = 0):
         
         ## Frame and argument 
         self.frame = frame                          # Associate tkinter object, tk.Tk() in PythonController
@@ -38,47 +35,45 @@ class Interface:
         ## Create Labels for each init variable, can grow arbitrarily large
         # the buttons are placed into an array, making them accesible in other methods and also outside of the initialized createInterface class
         for i in self.obj.initVar: 
-            print('i is') #added to test python3
-            print(i) #added to test python3
-            name = i[1]+ " (" +i[3] +"): "
+
+            name = i[1] + " (" + i[3] + "): "
             startingVal = i[2]
             row = rowCount
             label = tk.Label(self.frame, text=name)
-            label.grid(column=0,row= row)
-            print(type(startingVal)) #added to test python3
-            print(startingVal) #added to test python3
+            label.grid(column = 0, row = row)
+
             band = tk.Entry(self.frame)
-            startingVal = str(round(float(startingVal),3))  # Round the float for aesthetic reasons
+            startingVal = str(round(float(startingVal), 3))  # Round the float for aesthetic reasons
             band.insert(0, startingVal)
             band.config(justify=tk.CENTER)
             self.initVarEntry.append(band)
             
-            self.initVarEntry[rowCount].grid(column=1, row = rowCount)
-            sett = tk.Button(self.frame, text ="SET", width = 10, command = lambda row = row: self.setButtonCMD(row)) # Have to reassign the row variable within lambda, in order to avoid scope issue where all buttons passed arg equal to the final assignment of row
+            self.initVarEntry[rowCount].grid(column = 1, row = rowCount)
+            sett = tk.Button(self.frame, text = "SET", width = 10, command = lambda row = row: self.setButtonCMD(row)) # Have to reassign the row variable within lambda, in order to avoid scope issue where all buttons passed arg equal to the final assignment of row
             sett.configure(state = 'disabled') # Disabled by default to avoid data loss when START is pressed and the record of SET changes is overwritten.
             self.initVarButts.append(sett)
-            self.initVarButts[row].grid(column=2, row = row)
-            rowCount+=1  
+            self.initVarButts[row].grid(column = 2, row = row)
+            rowCount += 1  
             
         ## Create Savefile zone
         self.saveLabel = tk.Label(self.frame, text="Save Filename: ")
-        self.saveLabel.grid(column=0,row=rowCount, pady = (15,2))
+        self.saveLabel.grid(column = 0,row = rowCount, pady = (15,2))
         self.saveEntry = tk.Entry(self.frame)
-        self.saveEntry.grid(column=1, row = rowCount, pady = (15,2))
+        self.saveEntry.grid(column = 1, row = rowCount, pady = (15,2))
         self.saveButt = tk.Button(self.frame, text = "SAVE", width = 10,  command = self.saveButtonCMD, state='disabled')
-        self.saveButt.grid(column=2, row = rowCount, pady = (15,2))  
+        self.saveButt.grid(column = 2, row = rowCount, pady = (15,2))  
        
-        rowCount+=1
+        rowCount += 1
          
         ## Create START, STOP, and QUIT buttons
         self.endButt = tk.Button(self.frame, text = "QUIT", width = 10, command = self.exitButtonCMD )
-        self.endButt.grid(column=0, row=rowCount, pady=10)  
+        self.endButt.grid(column = 0, row = rowCount, pady = 10)  
         self.stopButt = tk.Button(self.frame, text = "PAUSE", width = 10, command = self.pauseButtonCMD, state='disabled' )
-        self.stopButt.grid(column=1, row=rowCount, pady=10)   
+        self.stopButt.grid(column = 1, row = rowCount, pady = 10)   
         self.startButt = tk.Button(self.frame, text = "START", width = 10, command = self.startButtonCMD )
-        self.startButt.grid(column=2, row=rowCount, pady=10) 
+        self.startButt.grid(column = 2, row = rowCount, pady = 10) 
         
-        rowCount+=1
+        rowCount += 1
         
         ## Magic numbers for formatting for the main page, only really used once, but good to have if anything is added later
         mainWindowWidth = 580
@@ -86,8 +81,8 @@ class Interface:
         
         note = tk.Label(self.frame, text = "Leave filename field empty for a timestamp default. \nThe filetype '.csv' will be appended automatically to your input.\n\nPressing PAUSE and then START will wipe any recorded data,\nso it is highly recommended that you SAVE your data."
                         ,justify = tk.CENTER, width = 80)
-        note.grid(column=0, row = rowCount, columnspan = 3, pady=(0,10))
-        rowCount+=1
+        note.grid(column = 0, row = rowCount, columnspan = 3, pady = (0,10))
+        rowCount += 1
 
         self.frame.geometry("%dx%d%+d%+d" % (mainWindowWidth, mainWindowHeight, 400, 400))
         self.frame.resizable(width=False, height = True) 
@@ -97,10 +92,7 @@ class Interface:
         ## Init data storage for copy from ArduinoClass and then graphing
         self.getMainStorage()
         
-        ## Start thread for parallel script execution 
-
-        #self.thread = threading.Thread(target = tk.mainloop, name = "GUI  loop")   # the interface should only change condition variables within the other loops # removed, tk.mainloop is called in PythonController, which should only be once in the main loop
-
+        ## Start thread for parallel script execution # changed for python 3, just run mainloop in python controller
         
     
 ###### MAIN WINDOW BUTTON HANDLER METHODS ################################################################################################################################################################################################
@@ -108,11 +100,11 @@ class Interface:
     
     def startButtonCMD(self):     
         print("\nSTARTING")
-        self.stopButt.configure(state='active')
-        self.saveButt.configure(state='disabled')
-        self.startButt.configure(state='disabled')
+        self.stopButt.configure(state = 'active')
+        self.saveButt.configure(state = 'disabled')
+        self.startButt.configure(state = 'disabled')
         self.obj.mainStorage = []
-        self.obj.initSetRecord =[]
+        self.obj.initSetRecord = []
         
         if self.startedFlag != 1:
             self.obj.start()    # Change data collection variable in the serial object  
@@ -154,15 +146,15 @@ class Interface:
         print("\nSAVING")    
         saveFileName = self.saveEntry.get()
         self.obj.save(saveFileName)
-        self.saveEntry.delete(0,'end')
+        self.saveEntry.delete(0, 'end')
 
     def pauseButtonCMD(self):
         print("\nPAUSING")
         self.obj.stop()
-        self.saveButt.configure(state='active')
-        self.startButt.configure(state='active')        
+        self.saveButt.configure(state = 'active')
+        self.startButt.configure(state = 'active')        
         for i in self.initVarButts: # Disable the SET buttons to avoid data loss when START is pressed and the record of SET changes are overwritten  
-            i.configure(state='disabled')
+            i.configure(state = 'disabled')
             
 ##### REC WINDOW METHODS ######################################################################
        
@@ -182,12 +174,12 @@ class Interface:
                 entry.config(justify=tk.CENTER)
                 self.recEntryArry.append(entry)
                 self.recEntryArry[row].pack()
-                button = tk.Button(self.dataRec, text ="PLOT", width = 10,  command = lambda row = row: self.plotButtonCMD(row)) # Row var re-assigned due to scoping issue, as stated during init section
+                button = tk.Button(self.dataRec, text = "PLOT", width = 10,  command = lambda row = row: self.plotButtonCMD(row)) # Row var re-assigned due to scoping issue, as stated during init section
                 self.recButtArry.append(button)                           # Use this to access the buttons later for unique congifuration
-                self.recButtArry[row].pack(pady=10)
-                row +=1        
+                self.recButtArry[row].pack(pady = 10)
+                row += 1        
                 
-        message = tk.Message(self.dataRec, text="Precision of measurements truncated for display. Only showing every 1-in-10 data points or so of the total being recorded to memory.\n\nWindow will close when application is quit."
+        message = tk.Message(self.dataRec, text = "Precision of measurements truncated for display. Only showing every 1-in-10 data points or so of the total being recorded to memory.\n\nWindow will close when application is quit."
                              , width = 250, justify = tk.CENTER)
         message.pack()
         self.dataRec.protocol("WM_DELETE_WINDOW", self.buttonOverride) # Replaces functionality of the big red X button in the top right
@@ -200,9 +192,9 @@ class Interface:
         message = "Graphing every 10 measurements of: " + str(self.obj.headerTable[row])      
         graph = gc.Graph(win, self.obj, row, verbose = self.verbose)        
         tk.Label(win, text=message).pack()
-        tk.Button(win,text='CLOSE', command = lambda graph = graph, win = win: self.plotCloseButtonCMD(graph, win)).pack()
+        tk.Button(win,text = 'CLOSE', command = lambda graph = graph, win = win: self.plotCloseButtonCMD(graph, win)).pack()
         win.protocol("WM_DELETE_WINDOW", self.buttonOverride)     
-        win.resizable(width=False,height=False) 
+        win.resizable(width = False, height = False) 
         win.title("\n LIVE GRAPH")
         win.attributes("-topmost", True)  
         win.geometry("%dx%d%+d%+d" % (600, 600, 400, 400))
