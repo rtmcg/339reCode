@@ -5,13 +5,13 @@ import struct
 #Import time library
 import time as t
 #8-bit value to be written to PWB pin
-value = 255
+value = 100
 #Initialize serial port and label port ``serialPort"
 serialPort = serial.Serial()
 #Set baud-rate to 9600
 serialPort.baudrate = 9600
 #Set port name to that of Arduino-need to replace ? with correct COM port number
-serialPort.port = "COM3" # COM?
+serialPort.port = "COM4" # COM?
 #Prints port specifications
 print(serialPort)
 #Open serial port
