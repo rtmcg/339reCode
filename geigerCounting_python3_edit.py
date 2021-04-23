@@ -30,18 +30,20 @@ import datetime
 # ==============================================================================
 
 class GeigerArduino:
-    def __init__(self,verbose=1):   # Verbose mode will let give you a lot more information, and is best used in conjunction with debug==2 in Arduino, default = 0
+    def __init__(self,verbose=0):   # Verbose mode will let give you a lot more information, and is best used in conjunction with debug==2 in Arduino, default = 0
         self.verbose = verbose      # Sets the instance attribute equal to the user's input or the default value
         if verbose: print("introArduino class creator: Verbose mode activated")
-        for i in range(2,10):       # Iterate through a series of port options, trying to see if the Arduino is connected
-            device = "COM%d" % (i)  # Encode current port option
-            if verbose: print(("Trying '%s'"%(device)))
-            try:                    # If there is an exception when the serial.Serial() method is called, the script won't crash, and instead will try other things
-                self.device = serial.Serial(device,baudrate=9600,timeout=2.0,)  # Initialize an isntance of PySerial's serial connection, with the variable name self.device (in this case it'll be a.handle())
-                if verbose: print("Found device at %s" % (device))
-                break
-            except:                     # Code within this will execute right after an exception happens in the try part
-                continue
+        #for i in range(2,10):       # Iterate through a series of port options, trying to see if the Arduino is connected
+            #device = "COM%d" % (i)  # Encode current port option
+        device = "COM4" # Encode current port option
+        if verbose: print(("Trying '%s'"%(device)))
+        try:                    # If there is an exception when the serial.Serial() method is called, the script won't crash, and instead will try other things
+            self.device = serial.Serial(device,baudrate=9600,timeout=2.0,)  # Initialize an isntance of PySerial's serial connection, with the variable name self.device (in this case it'll be a.handle())
+            if verbose: print("Found device at %s" % (device))
+            #break
+        except:                     # Code within this will execute right after an exception happens in the try part
+            print('Device not found')
+            #continue
         buf = self.device.read(10000)   # Clean out the buffer by reading bytes
         if self.verbose: print(("cleared %d bytes"%(len(buf))))
         self.device.setDTR(1);          # Reboot Arduino
@@ -135,6 +137,5 @@ def geiger(replicas=2, intervals=10, period=0.2):
 # ==============================================================================
 #                               Run the script!
 # ==============================================================================
-    
-rc = geiger(replicas=1, intervals=100, period=0.2) # Before there was a 'graphics' parameter, but that didn't do anything.
 
+rc = geiger(replicas=1, intervals=100 ,period=0.2) # Before there was a 'graphics' parameter, but that didn't do anything.
