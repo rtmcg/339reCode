@@ -20,18 +20,22 @@ Reviewed and updated Summer 2018
 """
 
 class Arduino: # Definition of class made to read geiger data sent from Arduino 
-    def __init__(self,verbose =0):
+    def __init__(self, verbose = 0):
         self.verbose = verbose
         if self.verbose: print("verbose output active")
-        for i in range(2,10):
-            device = "COM%d" % (i)
-            print(("Trying '%s'"%(device)))
-            try:
-                self.handle = serial.Serial(device,baudrate=9600,timeout=2.0,)
-                print("Found device at %s" % (device))
-                break
-            except:
-                continue
+        #for i in range(2,10):
+        #device = "COM%d" % (i)
+        device = "COM4"
+        #print("Trying '%s'"%(device))
+        print(f"Trying '{device}'")
+        try:
+            self.handle = serial.Serial(device,baudrate=9600,timeout=2.0,)
+            #print("Found device at %s" % (device))
+            print(f"Found device at {device}")
+            #break
+        except:
+            print('Device not found')
+            #continue
         tries = 0
         if tries <5:
             tries += 1
@@ -40,18 +44,22 @@ class Arduino: # Definition of class made to read geiger data sent from Arduino
             if self.verbose: print("Clearing I/O buffer")
             self.handle.timeout = 0
             resp = self.handle.read(1048756)
-            if self.verbose: print(("Cleared %d bytes of junk" % (len(resp))))
+            #if self.verbose: print("Cleared %d bytes of junk" % (len(resp)))
+            if self.verbose: print(f"Cleared {len(resp)} bytes of junk")
             if self.verbose: print("Waiting for wakeup")
             self.handle.timeout = 2;
             #resp = self.handle.readline() 
             resp = self.handle.readline().decode()#.split('\r\n')#[0]
             if "Geiger 2018\r\n" == resp:
-                print("Got the expected response: ''%s'', Arduino initialized, waiting for events." % repr(resp))
+                #print("Got the expected response: ''%s'', Arduino initialized, waiting for events." % repr(resp))
+                print(f"Got the expected response: ''{repr(resp)}'', Arduino initialized, waiting for events.")
                 self.handle.timeout = 2000      # 2000s because we want to wait a long time when doing readline            
                 return
-            print("Unexpected response: ''%s'', going to retry..." % repr(resp))
+            #print("Unexpected response: ''%s'', going to retry..." % repr(resp))
+            print(f"Unexpected response: ''{repr(resp)}'', going to retry...")
         elif tries == 5 :
-            print(("Giving up on device ''%s''"%(device)))
+            #print("Giving up on device ''%s''"%(device))
+            print(f"Giving up on device ''{device}''")
             self.handle.close()
             raise RuntimeError("No Geiger 2018 programmed device found")
      
@@ -75,7 +83,6 @@ class Arduino: # Definition of class made to read geiger data sent from Arduino
         if "Overrun\r\n" == resp:
             self.handle.close()
             raise RuntimeError("Arduino reports overrun")
-        #return int(resp)
         return int(resp) 
  
     def backlog(self):
@@ -94,13 +101,13 @@ class Arduino: # Definition of class made to read geiger data sent from Arduino
      
 
 
-arduino = Arduino(verbose=0) # Initialize an instance of the Arduino class, default 0
+arduino = Arduino(verbose=1) # Initialize an instance of the Arduino class, default 0
 
 
 '''****************  THESE ARE THE ONLY VALUES YOU NEED TO CHANGE  *************************'''
 
 intervalNum = 100     # Number of intervals to be recorded
-replicaNum = 3       # Number of replicas to record
+replicaNum = 1       # Number of replicas to record
 
 '''*****************************************************************************************'''
  
@@ -112,7 +119,8 @@ intervals = n.ones((replicaNum,intervalNum)) # Declare intervals array, and fill
 for replica in range(replicaNum):   # Pack interval data into intervals array, and report to user
     for interval in range(intervalNum):    
         intervals[replica,interval] = arduino.getInterval() # GetInterval() has a 2000 second timeout, but will finish once a click happens 
-        print("\nReplica # %d. Interval # %d. Interval length received: %d" % ((replica+1), (interval+1), intervals[replica,interval]))
+        #print("\nReplica # %d. Interval # %d. Interval length received: %d" % ((replica+1), (interval+1), intervals[replica,interval]))
+        print(f"\nReplica # {(replica+1)}. Interval # {(interval+1)}. Interval length received: {intervals[replica,interval]}")
 
 for i in range(replicaNum): # Histogram graphing section, to visually check if the data is decent.
     p.hist(intervals[i,:],)
