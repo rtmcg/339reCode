@@ -19,7 +19,7 @@ serialPort.open()
 #Send write values to serial port until response character "W" is received
 dataRead = False
 while dataRead == False:
-    serialPort.write(chr(value).encode(encoding = 'latin-1')) # encode to bytes and write to port, str.encode(encoding="utf-8", errors="strict") chr() in python 3 is unichr() in python 2, encoding = 'ISO-8859-1' also works
+    serialPort.write(chr(value).encode(encoding = 'latin-1')) # encode to single bytes and write to port, str.encode(encoding="utf-8", errors="strict") chr() in python 3 is unichr() in python 2, encoding = 'ISO-8859-1' also works
     #serialPort.write(value.to_bytes(1, byteorder='big')) # this works also, int.to_bytes(length, byteorder, *, signed=False)
     #serialPort.write(bytes([value])) # also works bytes([source[, encoding[, errors]]])
     #serialPort.write(struct.pack('B', value)) # also works struct.pack(format, v1, v2, ...)
