@@ -45,7 +45,7 @@ class Graph:
         self.canvas.draw() # shows plot # changed for python 3
         
         self.canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
-        self.canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)    
+        self.canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True) # puts widgets in blocks and places in tkinter matplotlib figure canvas, packs against top, fills all sides and expands to fill any space   
         
         self.animate() # Call the animate() function, which will call itself via self.root.after()
 
@@ -57,8 +57,8 @@ class Graph:
         self.a.clear()                  # Clear the subplot, to be replotted with fresh data      
         self.a.set_xlabel(self.xlabel)  # Set labels
         self.a.set_ylabel(self.ylabel)
-        self.a.plot(self.xar,self.yar)  # Plot the data        
-        self.canvas.draw()        
+        self.a.plot(self.xar, self.yar)  # Plot the data        
+        self.canvas.draw() # draw canvas   
         self.root.after(self.updatePeriod, self.animate)  # Tells TKInter to call self.animate() after self.updatePeriod (ms)
         
     def updateData(self):  
@@ -66,4 +66,4 @@ class Graph:
         for tempRow in self.obj.mainStorage[1::self.timeSlice]: # For every block of data received by the Controller, take 1 in every self.timeSlice rows
             newPoint = tempRow[self.row]    # Add relevant data point based on self.row, it picks a specific set of elements
             self.yar.append(newPoint)       # Add to the Y-axis array
-        self.xar = list(range(0, len(self.yar*self.timeSlice),self.timeSlice)) # Populate the X-axis array with appropriate values and skips
+        self.xar = list(range(0, len(self.yar*self.timeSlice), self.timeSlice)) # Populate the X-axis array with appropriate values and skips
