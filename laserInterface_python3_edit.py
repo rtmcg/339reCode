@@ -29,13 +29,13 @@ a.send("START")             # Start the stepping/reading
 a.send("STOP")              # Sends a signal to change a variable on the arduino such that the motor stops after one full loop
 
 arryAll = []    # Declare arrays for storing data.
-stepCounts=[]   # Step indexes
+stepCounts = []   # Step indexes
 adcValues = []  # ADC readings
 
-index = -1 # I'm not sure the point of this, the index is not incremented, maybe set it to 10 if leaving the loop after one time is wanted
+index = -1 # I'm not sure the point of this, the index is not incremented, maybe set it to 10 if leaving the loop after one time is wanted, it is used in the graphing code
 for k in range(steps):
-    resp = a.getResp()
-    if 9 == len(resp) and resp[4] == ':':
+    resp = a.getResp() # get a readline
+    if 9 == len(resp) and resp[4] == ':': # if the length of the response is 9 and the 4 index of it is :
         arryAll.append(resp)               # Append raw response to array of raw serial data
         print("Got response ", resp, "\n")
             
@@ -51,11 +51,11 @@ for k in range(steps):
         #print(("Length: %d"%(len(resp))))
         print(f"Unexpected response: {resp}")
         print(f"Length: {len(resp)}")        
-    if 10 == index:
-        break
+    if 10 == index: # could leave loop after one time if this were set to 10
+        break # leave loop
         
-stepCountsCal=np.array(stepCounts) * degsPerStep
-adcValuesnp=np.array(adcValues)    
+stepCountsCal = np.array(stepCounts) * degsPerStep # multiply array of stecounts by degsperstep
+adcValuesnp = np.array(adcValues) # make array of adcvalues
     
 plt.plot(stepCountsCal, adcValuesnp)    # Basic plot of ADC value per calibrated degree
                                              # Useful for a quick check of th data's quality
