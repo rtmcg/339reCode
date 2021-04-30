@@ -9,7 +9,7 @@ import serial
 
 class Arduino:
     def __init__(self, device = 'COM3', verbose = 0): # device is COM port used with arduino
-        self.verbose = verbose # get verbose class attribute
+        self.verbose = verbose # get verbose instance attribute
         if verbose: print("introArduino class creator: Verbose mode activated")
         #for i in range(2,10): # you may have to adjust range(1,10) depending on your COM ports
             #device = "COM%d" % (i) 
