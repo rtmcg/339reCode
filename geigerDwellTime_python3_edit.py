@@ -21,7 +21,7 @@ Reviewed and updated Summer 2018
 
 class Arduino: # Definition of class made to read geiger data sent from Arduino 
     def __init__(self, verbose = 0):
-        self.verbose = verbose # create verbose class attribute
+        self.verbose = verbose # create verbose instance attribute
         if self.verbose: print("verbose output active") # print if verbose 
         #for i in range(2,10):
         #device = "COM%d" % (i)
