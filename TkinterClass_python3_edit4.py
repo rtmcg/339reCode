@@ -93,7 +93,7 @@ class Interface:
         self.getMainStorage()
         
         ## Start thread for parallel script execution # changed for python 3, just run mainloop in python controller
-        
+        # Putting tkinter into a thread was removed for python 3
     
 ###### MAIN WINDOW BUTTON HANDLER METHODS ################################################################################################################################################################################################
  
