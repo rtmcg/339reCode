@@ -36,7 +36,7 @@ class GeigerArduino: # class for the arduino, send and receive data and close
         if verbose: print("GeigerArduino class creator: Verbose mode activated") # not sure where "intro" came from
         #for i in range(2,10):       # Iterate through a series of port options, trying to see if the Arduino is connected # better they assign the com port themselves
             #device = "COM%d" % (i)  # Encode current port option
-        device = "COM4" # Encode current port option
+        device = "COM6" # Encode current port option
         #if verbose: print(("Trying '%s'"%(device)))
         if verbose: print(f"Trying '{device}'") # if verbose, print trying with device number
         try:                    # If there is an exception when the serial.Serial() method is called, the script won't crash, and instead will try other things
@@ -155,4 +155,4 @@ def geiger(replicas = 2, intervals = 10, period = 0.2): # used to run class and 
 #                               Run the script!
 # ==============================================================================
 
-rc = geiger(replicas = 1, intervals = 100, period = 0.2) # Before there was a 'graphics' parameter, but that didn't do anything. Run geiger function
+rc = geiger(replicas = 2, intervals = 100, period = 0.2) # Before there was a 'graphics' parameter, but that didn't do anything. Run geiger function

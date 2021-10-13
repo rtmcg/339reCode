@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jul 04 09:18:21 2018
-
-@author: James Fraser
-
-And Greg 2020-21
-
+Written by Mark Orchard-Webb (pre-2018)
+Modified by James Fraser 2018.07.04 09:18:21
+And Greg Bell 2020-21
 """
 
 import serial

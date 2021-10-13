@@ -29,7 +29,8 @@ class Arduino:
         attempts = 0
         while True: # runs until break or return
             try:
-                if "LASER 2017" == self.getResp()[0:10]: # if the first part of the serial port response is this
+                # if "LASER 2017" == self.getResp()[0:10]: # if the first part of the serial port response is this
+                if "LASER 2021" == self.getResp()[0:10]: # if the first part of the serial port response is this
                     if verbose: print("Arduino is communicating")
                     return # leaves loop because it leaves the init function
             except:

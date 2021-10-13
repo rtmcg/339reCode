@@ -1,0 +1,22 @@
+The following error occurred when I powered off the Geiger counter in the middle of a run.
+I wanted to see how long the timeout for collecting data is, because there's mention of 2000 seconds as a timeout in the Python code.
+It was more like 2 seconds...
+
+
+<begin console>
+Replica # 1. Interval # 59. Interval length received: 2876.0
+Verbose got resp: '' 
+
+Traceback (most recent call last):
+
+  File "C:\Users\rturne11\Downloads\339reCode\geigerDwellTime_python3_edit.py", line 128, in <module>
+    intervals[replica,interval] = arduino.getInterval() # GetInterval() has a 2000 second timeout, but will finish once a click happens
+
+  File "C:\Users\rturne11\Downloads\339reCode\geigerDwellTime_python3_edit.py", line 92, in getInterval
+    return int(resp) # return resp as int
+
+ValueError: invalid literal for int() with base 10: ''
+
+
+In [16]: 
+</end console>

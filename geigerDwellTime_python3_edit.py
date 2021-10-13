@@ -16,7 +16,11 @@ Be sure to connect the geiger to pin 2 (this is the pin to which an Arduino inte
 
 Scroll down for options regarding replica and interval quantities
 
-Reviewed and updated Summer 2018
+Created by Mark Orchard-Webb (pre-2018)
+Reviewed and updated by
+Jame Fraser Summer 2018
+and
+Greg Bell 2021.04.
 """
 
 class Arduino: # Definition of class made to read geiger data sent from Arduino 
@@ -25,7 +29,7 @@ class Arduino: # Definition of class made to read geiger data sent from Arduino
         if self.verbose: print("verbose output active") # print if verbose 
         #for i in range(2,10):
         #device = "COM%d" % (i)
-        device = "COM4" # set by user, from what's on arduino
+        device = "COM6" # set by user, from what's on arduino
         #print("Trying '%s'"%(device))
         print(f"Trying '{device}'") # print trying the port set
         try:
@@ -69,7 +73,7 @@ class Arduino: # Definition of class made to read geiger data sent from Arduino
         """
         Returns the duration of next interval between events in microseconds.  
         It may raise an exception if an overrun is detected.  
-        An overrun happens when events arise to quickly and the Arduino cannot
+        An overrun happens when events arise too quickly and the Arduino cannot
         get data out fast enough to prevent data loss.
         """
         #resp = self.handle.readline()
@@ -110,7 +114,7 @@ arduino = Arduino(verbose = 1) # Initialize an instance of the Arduino class, de
 '''****************  THESE ARE THE ONLY VALUES YOU NEED TO CHANGE  *************************'''
 
 intervalNum = 100     # Number of intervals to be recorded
-replicaNum = 1       # Number of replicas to record
+replicaNum = 2       # Number of replicas to record
 
 '''*****************************************************************************************'''
  
