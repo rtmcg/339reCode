@@ -19,7 +19,8 @@ class Arduino:
         
         self.verbose = verbose
         self.running = False # when not running
-        self.end_thread = False
+        self.thread_run = True
+        
         self.mainStorage = [] # where data from arduino is stored
         self.headerTable = [] # where recorded variables are stored
         self.unitTable = [] # where units are stored
@@ -184,7 +185,10 @@ class Arduino:
     def stop(self):   
         self.send("STOP")
         self.running = False
-        self.end_thread = True
+        self.thread_run = False
+        #self.thread.join() # Get bad data collection if joined here
+        #print('Thread alive:' , self.thread.is_alive())
+
 
     ## Function to change parameters defined on the Arduino. Best used only when running, and could probably use a run condition based on the flag self.running
     def set(self, varName, inputVal): 
@@ -250,7 +254,7 @@ class Arduino:
         self.device.cancel_read() # added, was getting errors when closing
         self.device.close() # close port
         del self.device # delete device object
-        if self.verbose: print("\nPort sould be closed now.\n")
+        if self.verbose: print("\nPort should be closed now.\n")
         
 #======== PRIMARY METHOD FOR DATA COLLECTION=======================#
 ## This is an inifinite loop continually running in a 'threading' thread. See documentation for info on threads.
@@ -261,7 +265,7 @@ class Arduino:
         
         if self.verbose : print("\nStarting data collection loop")
         
-        while True:
+        while self.thread_run:
             while self.running: # turned off or on when taking data
                 try:
                     resp = self.getResp()               # Readline
@@ -289,8 +293,6 @@ class Arduino:
                             self.mainStorage.append(tempStorage)        # Add temp to main array
                             if self.verbose: print("DATA STORED AS: ", tempStorage, "\n")
                             tempStorage = []
-                if self.end_thread == True:
-                    self.thread.join()
                 
                    
  #======== CONVERSION METHODS FOR DATA TRANSFER=======================#

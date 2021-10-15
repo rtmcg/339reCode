@@ -10,7 +10,7 @@ And Greg 2020-21
 import tkinter as tk
 import GraphingClass_python3_edit4 as gc # change if filename changes
 #import sys
-
+import threading
 class Interface:
 ###### WIDGET INITIALIZATION FUNCTIONS ################################################################################################################################################################################################
     def __init__(self, frame, obj, verbose = 0):
@@ -93,7 +93,7 @@ class Interface:
         self.getMainStorage()
         
         ## Start thread for parallel script execution # changed for python 3, just run mainloop in python controller
-        # Putting tkinter into a thread was removed for python 3
+        # Removed for python 3
     
 ###### MAIN WINDOW BUTTON HANDLER METHODS ################################################################################################################################################################################################
  
@@ -132,6 +132,8 @@ class Interface:
         
         if self.verbose: print("\nDeleting GUI object")
         self.frame.destroy() # destroys tkinter frame
+        self.obj.thread.join()
+        print("Thread alive:", self.obj.thread.is_alive())
       
         print("\nSuccessful exit, you can now safely restart the app.\n")        
        
