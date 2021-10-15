@@ -19,7 +19,7 @@ class Arduino:
         
         self.verbose = verbose
         self.running = False # when not running
-
+        self.end_thread = False
         self.mainStorage = [] # where data from arduino is stored
         self.headerTable = [] # where recorded variables are stored
         self.unitTable = [] # where units are stored
@@ -184,7 +184,8 @@ class Arduino:
     def stop(self):   
         self.send("STOP")
         self.running = False
-        
+        self.end_thread = True
+
     ## Function to change parameters defined on the Arduino. Best used only when running, and could probably use a run condition based on the flag self.running
     def set(self, varName, inputVal): 
         try:
@@ -288,6 +289,9 @@ class Arduino:
                             self.mainStorage.append(tempStorage)        # Add temp to main array
                             if self.verbose: print("DATA STORED AS: ", tempStorage, "\n")
                             tempStorage = []
+                if self.end_thread == True:
+                    self.thread.join()
+                
                    
  #======== CONVERSION METHODS FOR DATA TRANSFER=======================#
  
