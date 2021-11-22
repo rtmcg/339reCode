@@ -35,19 +35,16 @@ class Interface:
         ## Create Labels for each init variable, can grow arbitrarily large
         # the buttons are placed into an array, making them accesible in other methods and also outside of the initialized createInterface class
         for i in self.obj.initVar: 
-
-            name = i[1] + " (" + i[3] + "): " # creates label names based on what was received from arduino
-            startingVal = i[2] # gives initial value for entry
-            row = rowCount # row out of rowcount
-            label = tk.Label(self.frame, text = name) # creates label with name on controller frame
-            label.grid(column = 0, row = row) # places label based on row in grid
-
-            band = tk.Entry(self.frame) # creates an entry 
-            startingVal = str(round(float(startingVal), 3))  # Round the float for aesthetic reasons
-            band.insert(0, startingVal) # inserts the value before index 0
-            band.config(justify=tk.CENTER) # centers the entry
-            self.initVarEntry.append(band) # appends entry 
-            
+            name = i[1]+ " (" +i[3] +"): "
+            startingVal = i[2]
+            row = rowCount
+            label = tk.Label(self.frame, text=name)
+            label.grid(column=0,row= row)
+            band = tk.Entry(self.frame)
+            startingVal = str(round(float(startingVal),3))  # Round the float for aesthetic reasons
+            band.insert(0, startingVal)
+            band.config(justify=tk.CENTER)
+            self.initVarEntry.append(band)            
             self.initVarEntry[rowCount].grid(column = 1, row = rowCount) # makes grid of entries
             sett = tk.Button(self.frame, text = "SET", width = 10, command = lambda row = row: self.setButtonCMD(row)) # Have to reassign the row variable within lambda, in order to avoid scope issue where all buttons passed arg equal to the final assignment of row
             sett.configure(state = 'disabled') # Disabled by default to avoid data loss when START is pressed and the record of SET changes is overwritten.

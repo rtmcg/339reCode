@@ -66,4 +66,4 @@ class Graph:
         for tempRow in self.obj.mainStorage[1::self.timeSlice]: # For every block of data received by the Controller, take 1 in every self.timeSlice rows
             newPoint = tempRow[self.row]    # Add relevant data point based on self.row, it picks a specific set of elements
             self.yar.append(newPoint)       # Add to the Y-axis array
-        self.xar = list(range(0, len(self.yar*self.timeSlice), self.timeSlice)) # Populate the X-axis array with appropriate values and skips
+        self.xar = list(range(0, len(self.yar*self.timeSlice),self.timeSlice)) # Populate the X-axis array with appropriate values and skips

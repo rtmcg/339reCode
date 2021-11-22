@@ -15,8 +15,7 @@ import struct
 import threading
 
 class Arduino:
-    def __init__(self, device = 'COM3', verbose=0):
-        
+    def __init__(self,verbose=0):
         self.verbose = verbose
         self.running = False # when not running
         self.thread_run = True
@@ -87,19 +86,16 @@ class Arduino:
 
     ## Send a line of string to Arduino ##
     def send(self,strr):
-        strr = strr + '\n' # added for python3, added \n since arduino code expects it
-        self.device.write(strr.encode()) # changed for python 3, encode string to bytes and write to serial port
-        #if self.verbose: print("\nSent '%s'\n" % (strr))
-        if self.verbose: print(f"\nSent '{strr}'\n")
+        strr = strr + '\n' #added for python3
+        self.device.write(strr.encode()) #changed for python 3
+        if self.verbose: print("\nSent '%s'\n" % (strr))
    
      
     ## Read and slightly clean a line from Arduino ##
     def getResp(self):
-        strr = self.device.readline().decode('ISO-8859-1', errors='ignore').split('\r\n')[0].replace('\n', '') # changed for python 3, readline from serial port, using latin-1 (same as iso-8859-1) for single bytes, split along \r\n, get first element, then get rid of \n
-        #if self.verbose: print("Raw resp: '%s' " % (strr))
-        if self.verbose: print(f"Raw resp: '{strr}' ")
-
-        return strr # str was used before but it's a python keyword, best to avoid
+        strr = self.device.readline().decode('ISO-8859-1', errors='ignore').split('\r\n')[0].replace('\n', '') #changed for python 3
+        if self.verbose: print("Raw resp: '%s' " % (strr))
+        return strr
     
         
     ## Function for acquiring INIT variables defined in the Arduino code, necessary to start the main window ##
@@ -252,9 +248,10 @@ class Arduino:
    ## Convenient to have a function to close the serial port 
     def closePort(self):
         self.device.cancel_read() # added, was getting errors when closing
-        self.device.close() # close port
-        del self.device # delete device object
-        if self.verbose: print("\nPort should be closed now.\n")
+        self.device.close()
+        del self.device
+        if self.verbose: print("\nPort sould be closed now.\n")
+
         
 #======== PRIMARY METHOD FOR DATA COLLECTION=======================#
 ## This is an inifinite loop continually running in a 'threading' thread. See documentation for info on threads.
@@ -265,8 +262,8 @@ class Arduino:
         
         if self.verbose : print("\nStarting data collection loop")
         
-        while self.thread_run:
-            while self.running: # turned off or on when taking data
+        while True:
+            while self.running:    
                 try:
                     resp = self.getResp()               # Readline
                 except:
@@ -299,9 +296,9 @@ class Arduino:
  
     def convertHexToDec(self, hexVal): # Used to convert data sent from Arduino
         try:
-            if hexVal == '0': # if just 0
-                hexVal = "00000000" # turn into hexadecimal value
-            value = struct.unpack('!f', bytes.fromhex(hexVal))[0] # changed for python3, struct module performs conversions between Python values and C structs represented as Python bytes objects. create bytes from hexadecimal value, unpack it as float from big-endian byte order, and take first value since result is tuple
+            if hexVal == '0':
+                hexVal = "00000000"
+            value = struct.unpack('!f', bytes.fromhex(hexVal))[0] #changed for python3
             return value    
         except:
             print("JUNK DATA: " + hexVal)
